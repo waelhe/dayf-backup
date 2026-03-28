@@ -1,0 +1,11 @@
+{
+  "name": "socket-service",
+  "version": "1.0.0",
+  "description": "Socket.io service for Dayf Platform - Real-time events",
+  "scripts": {
+    "dev": "bun --hot index.ts"
+  },
+  "dependencies": {
+    "socket.io": "^4.7.0"
+  }
+}
