@@ -34,6 +34,7 @@ import MarketHighlights from '@/features/marketplace/components/MarketHighlights
 import CommunityHighlights from '@/features/community/components/CommunityHighlights';
 import { ReviewsHighlights } from '@/features/reviews/components';
 import { useAuth } from '@/contexts/AuthContext';
+import { ExternalLink, MessageSquare, ShoppingCart, LayoutDashboard, Store } from 'lucide-react';
 
 interface WishlistItem {
   id: string;
@@ -102,6 +103,49 @@ export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col bg-[#F8F5F0]">
       <Header onWishlistClick={() => setIsWishlistOpen(true)} />
+      
+      {/* Quick Links to Services - روابط سريعة للخدمات */}
+      <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <span className="text-sm font-medium opacity-90">
+              {language === 'ar' ? '🚀 الخدمات المتكاملة:' : '🚀 Integrated Services:'}
+            </span>
+            <div className="flex items-center gap-2 flex-wrap">
+              <a 
+                href="/?XTransformPort=3001" 
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium transition-all"
+              >
+                <MessageSquare className="w-4 h-4" />
+                {language === 'ar' ? 'المنتدى' : 'Forum'}
+              </a>
+              <a 
+                href="/?XTransformPort=3003" 
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium transition-all"
+              >
+                <Store className="w-4 h-4" />
+                {language === 'ar' ? 'المتجر' : 'Store'}
+              </a>
+              <a 
+                href="/graphql/?XTransformPort=3002" 
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium transition-all"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="w-4 h-4" />
+                {language === 'ar' ? 'GraphQL' : 'GraphQL'}
+              </a>
+              <a 
+                href="/?XTransformPort=3003" 
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-full text-sm font-medium transition-all"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                {language === 'ar' ? 'لوحة التحكم' : 'Dashboard'}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <Hero onSearch={handleSearch} />
       
