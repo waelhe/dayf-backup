@@ -1063,6 +1063,123 @@ resend                   ✅
 **التالي:** اختبار endpoints مع بيانات حقيقية
 
 ---
+## Task ID: 19 - Integration Planning (Dayf + Discourse + Saleor)
+### Work Task
+تخطيط وتوثيق خطة تكامل شاملة لإضافة Discourse (منتدى) و Saleor (سوق) إلى نظام Dayf
+
+### Problem Context
+المستخدم يريد:
+- منتدى للمراجعات والنقاشات السياحية
+- سوق للمنتجات والخدمات السياحية
+- تكامل مع Dayf عبر SSO و Webhooks
+- تحسين تدريجي للموارد
+
+### Solution: Comprehensive Documentation
+
+تم إنشاء مجلد توثيق كامل في `specs/005-integration-plan/`:
+
+**الملفات المُنشأة:**
+
+1. **`README.md`** - نظرة عامة وملخص سريع
+2. **`plan.md`** - الخطة الكاملة مع:
+   - الوضع الحالي (Dayf على Vercel + Supabase)
+   - البنية المستهدفة
+   - مراحل التنفيذ (4 مراحل)
+   - التكلفة والجدول الزمني
+
+3. **`architecture.md`** - البنية المعمارية:
+   - تدفق البيانات
+   - المنافذ (Ports)
+   - قواعد البيانات
+   - متغيرات البيئة
+   - الأمان
+
+4. **`discourse-setup.md`** - دليل إعداد Discourse:
+   - المتطلبات
+   - خطوات التثبيت
+   - Systemd Services
+   - Nginx Configuration
+   - تحسينات الذاكرة
+
+5. **`saleor-setup.md`** - دليل إعداد Saleor:
+   - المتطلبات
+   - خطوات التثبيت
+   - Dashboard و Storefront
+   - Systemd Services
+   - تحسينات الذاكرة
+
+6. **`sso-integration.md`** - دليل التكامل عبر SSO:
+   - Supabase Auth كـ Identity Provider
+   - Discourse SSO Plugin
+   - Saleor External Auth
+   - JWT Token Structure
+   - Flow الكامل
+
+7. **`webhooks.md`** - دليل التكامل عبر Webhooks:
+   - الأحداث من Saleor
+   - الأحداث من Discourse
+   - Webhook Endpoints في Dayf
+   - Retry Queue
+   - مراقبة Webhooks
+
+8. **`optimization.md`** - خطة التحسين التدريجي:
+   - منهجية التحسين (قيّس → غيّر → قيّس)
+   - أدوات القياس
+   - مراحل التحسين
+   - جدول التحسين
+   - قرارات التوسع
+
+### Key Decisions
+
+| القرار | الاختيار | السبب |
+|--------|----------|-------|
+| Dayf Database | Supabase | لا تغيير |
+| Discourse DB | PostgreSQL محلي | أداء أفضل |
+| Saleor DB | PostgreSQL محلي | مستقل |
+| SSO Provider | Supabase Auth | مركزي |
+| التحسين | تدريجي | آمن |
+
+### Estimated Costs
+
+| الخدمة | التكلفة |
+|--------|---------|
+| Supabase Pro | $25/شهر |
+| Vercel | مجاني/$20 |
+| الخادم المحلي | مجاني (Sandbox) |
+| **المجموع** | **$25-45/شهر** |
+
+### Timeline
+
+- **المرحلة 1**: البنية التحتية (1-2 يوم)
+- **المرحلة 2**: Discourse (3-5 أيام)
+- **المرحلة 3**: Saleor (5-7 أيام)
+- **المرحلة 4**: التكامل (3-5 أيام)
+- **الإجمالي**: 2-3 أسابيع
+
+### Memory Optimization Path
+
+| المرحلة | الاستهلاك | الخادم |
+|---------|-----------|--------|
+| الأولي | 4-5.5 GB | CPX41 ($8) |
+| بعد التحسين | 1.8-2.5 GB | CPX21 ($4) |
+
+**التوفير**: ~2.5-3 GB = ~$11/شهر
+
+Stage Summary:
+- ✅ 8 ملفات توثيق مكتملة
+- ✅ خطة تنفيذ واضحة
+- ✅ تقديرات التكلفة والوقت
+- ✅ خطة التحسين التدريجي
+- ✅ تم تحديث التوثيق ليعكس:
+  - Dayf على الخادم المحلي (Sandbox)
+  - اتصال Dayf بـ Supabase
+  - Vercel منفصل تماماً عن التطوير
+- 📂 الرابط: `specs/005-integration-plan/`
+
+**📍 نقطة التوقف:** التوثيق مكتمل ومحدّث، جاهز للتنفيذ
+**التالي:** المرحلة 1 - البنية التحتية المحلية (PostgreSQL + Redis)
+
+---
 ## Task ID: 18 - Realtime System Migration (Radical Solution)
 ### Work Task
 استبدال Socket.io المنفصل بنظام SSE مدمج داخل Next.js
@@ -4965,3 +5082,65 @@ else {
 - ✅ ESLint: 0 errors
 - ✅ Health check: `{"status":"ok","connectedUsers":0}`
 
+
+---
+## Task ID: 20 - Spec-Kit Documentation for Integration
+Agent: Main Agent
+Task: إنشاء وثائق spec-kit للتخطيط المعماري الصحيح لتكامل Discourse + Saleor
+
+Work Log:
+- ✅ قراءة constitution.md (6 مواد ثابتة)
+- ✅ قراءة rules/RULES.md (المحظورات والبدائل)
+- ✅ قراءة systems/SYSTEMS.md (خريطة الأنظمة الخمسة)
+- ✅ قراءة decisions/DECISIONS.md (القرارات المعمارية)
+- ✅ قراءة guide/GUIDE.md (دليل البناء)
+- ✅ إنشاء .specify/specs/004-integration/spec.md (المواصفة)
+- ✅ إنشاء .specify/specs/004-integration/plan.md (خطة التنفيذ)
+- ✅ إنشاء .specify/specs/004-integration/tasks.md (المهام)
+- ✅ تحديث status.md بإضافة مرحلة التكامل
+- ✅ إنشاء ملف مضغوط للوثائق: download/integration-plan-docs.zip
+
+Stage Summary:
+- ✅ تم تطبيق spec-kit methodology بشكل صحيح
+- ✅ تم إنشاء 3 ملفات تخطيط في .specify/specs/004-integration/
+- ✅ تم تحديث الدستور والقرارات
+- التالي: البدء في Phase 1 (البنية التحتية المحلية)
+
+### نتائج التحقق من الدستور:
+
+| المادة | المتطلب | التطبيق |
+|--------|---------|---------|
+| I | Escrow مطلوب | ✅ لا تأثير |
+| II | AI Fallback | ✅ لا AI في هذه المرحلة |
+| III | البيانات السياحية | ✅ محمية |
+| IV | المراجعات | ✅ سيتم لاحقاً |
+| V | Events/Webhooks | ✅ Webhooks للتكامل |
+| VI | الأمان | ✅ SSO آمن |
+
+### الملفات المُنشأة:
+```
+.specify/specs/004-integration/
+├── spec.md      ✅ المواصفة الوظيفية
+├── plan.md      ✅ خطة التنفيذ المعمارية
+└── tasks.md     ✅ المهام المرتبة
+
+download/
+└── integration-plan-docs.zip ✅ الوثائق الكاملة
+```
+
+### روابط الوثائق للتحميل:
+| الوثيقة | المسار |
+|---------|--------|
+| 📄 الخطة الكاملة | `specs/005-integration-plan/plan.md` |
+| 📄 البنية المعمارية | `specs/005-integration-plan/architecture.md` |
+| 📄 إعداد Discourse | `specs/005-integration-plan/discourse-setup.md` |
+| 📄 إعداد Saleor | `specs/005-integration-plan/saleor-setup.md` |
+| 📄 التكامل SSO | `specs/005-integration-plan/sso-integration.md` |
+| 📄 Webhooks | `specs/005-integration-plan/webhooks.md` |
+| 📄 التحسين | `specs/005-integration-plan/optimization.md` |
+| 📦 ZIP | `download/integration-plan-docs.zip` |
+
+---
+
+**📍 نقطة التوقف:** التخطيط مكتمل، جاهز للتنفيذ
+**التالي:** Phase 1 - تثبيت PostgreSQL + Redis محلياً

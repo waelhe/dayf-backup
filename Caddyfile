@@ -7,56 +7,76 @@
 # - Static file serving
 
 :81 {
-	# ============================================
-	# WebSocket Support for Socket.io
-	# دعم WebSocket لـ Socket.io
-	# ============================================
-	
-	@websocket {
-		header Connection *Upgrade*
-		header Upgrade websocket
-	}
-	
-	handle @websocket {
-		reverse_proxy localhost:3003 {
-			header_up Host {host}
-			header_up X-Forwarded-For {remote_host}
-			header_up X-Forwarded-Proto {scheme}
-			header_up X-Real-IP {remote_host}
-			header_up Upgrade {header.Upgrade}
-			header_up Connection {header.Connection}
-		}
-	}
+        # ============================================
+        # Socket.io Handler (Polling + WebSocket)
+        # معالج Socket.io (Polling + WebSocket)
+        # ============================================
+        
+        @socket_io {
+                path /socket.io/*
+        }
+        
+        handle @socket_io {
+                reverse_proxy localhost:3003 {
+                        header_up Host {host}
+                        header_up X-Forwarded-For {remote_host}
+                        header_up X-Forwarded-Proto {scheme}
+                        header_up X-Real-IP {remote_host}
+                        header_up Upgrade {header.Upgrade}
+                        header_up Connection {header.Connection}
+                }
+        }
 
-	# ============================================
-	# HTTP API with Port Transform
-	# طلبات HTTP مع تحويل المنفذ
-	# ============================================
-	
-	@transform_port_query {
-		query XTransformPort=*
-	}
+        # ============================================
+        # WebSocket Support for other services
+        # دعم WebSocket للخدمات الأخرى
+        # ============================================
+        
+        @websocket {
+                header Connection *Upgrade*
+                header Upgrade websocket
+        }
+        
+        handle @websocket {
+                reverse_proxy localhost:3003 {
+                        header_up Host {host}
+                        header_up X-Forwarded-For {remote_host}
+                        header_up X-Forwarded-Proto {scheme}
+                        header_up X-Real-IP {remote_host}
+                        header_up Upgrade {header.Upgrade}
+                        header_up Connection {header.Connection}
+                }
+        }
 
-	handle @transform_port_query {
-		reverse_proxy localhost:{query.XTransformPort} {
-			header_up Host {host}
-			header_up X-Forwarded-For {remote_host}
-			header_up X-Forwarded-Proto {scheme}
-			header_up X-Real-IP {remote_host}
-		}
-	}
+        # ============================================
+        # HTTP API with Port Transform
+        # طلبات HTTP مع تحويل المنفذ
+        # ============================================
+        
+        @transform_port_query {
+                query XTransformPort=*
+        }
 
-	# ============================================
-	# Default: Next.js Application
-	# الافتراضي: تطبيق Next.js
-	# ============================================
-	
-	handle {
-		reverse_proxy localhost:3000 {
-			header_up Host {host}
-			header_up X-Forwarded-For {remote_host}
-			header_up X-Forwarded-Proto {scheme}
-			header_up X-Real-IP {remote_host}
-		}
-	}
+        handle @transform_port_query {
+                reverse_proxy localhost:{query.XTransformPort} {
+                        header_up Host {host}
+                        header_up X-Forwarded-For {remote_host}
+                        header_up X-Forwarded-Proto {scheme}
+                        header_up X-Real-IP {remote_host}
+                }
+        }
+
+        # ============================================
+        # Default: Next.js Application
+        # الافتراضي: تطبيق Next.js
+        # ============================================
+        
+        handle {
+                reverse_proxy localhost:3000 {
+                        header_up Host {host}
+                        header_up X-Forwarded-For {remote_host}
+                        header_up X-Forwarded-Proto {scheme}
+                        header_up X-Real-IP {remote_host}
+                }
+        }
 }

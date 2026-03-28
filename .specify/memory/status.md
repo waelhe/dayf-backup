@@ -135,15 +135,36 @@
 ## 📍 الحالة الآن
 
 ### نعمل على:
-**المشروع جاهز للاستمرار في التطوير**
+**تكامل Discourse + Saleor مع Dayf**
 
 ### الملف/الوحدة الحالية:
-`.specify/memory/next-session.md` — معلومات الجلسة القادمة
+`.specify/specs/004-integration/` — مواصفات وخطة التكامل
 
 ### العقبات:
 - ✅ تم حله: جميع الخدمات هاجرت إلى Repository Pattern
 - ✅ تم حله: جميع الـ enums مركزية
 - ✅ تم حله: Prisma أُزيل من الكود
+
+---
+
+## 🆕 مرحلة التكامل (2025)
+
+### حالة التكامل: قيد التخطيط
+
+| المرحلة | الحالة |
+|---------|--------|
+| **Phase 0: التحقق من البيئة** | ⏳ جاهز للبدء |
+| **Phase 1: البنية التحتية (PG + Redis)** | ⬜ لم يبدأ |
+| **Phase 2: Discourse** | ⬜ لم يبدأ |
+| **Phase 3: Saleor** | ⬜ لم يبدأ |
+| **Phase 4: SSO Integration** | ⬜ لم يبدأ |
+| **Phase 5: التحسين التدريجي** | ⬜ لم يبدأ |
+
+### وثائق التكامل:
+- 📄 المواصفة: `.specify/specs/004-integration/spec.md`
+- 📄 الخطة: `.specify/specs/004-integration/plan.md`
+- 📄 المهام: `.specify/specs/004-integration/tasks.md`
+- 📄 تفصيلي: `specs/005-integration-plan/` (الوثائق الكاملة)
 
 ---
 

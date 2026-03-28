@@ -49,6 +49,7 @@ const io = new SocketIOServer(httpServer, {
   transports: ['websocket', 'polling'],
   pingTimeout: 60000,
   pingInterval: 25000,
+  path: '/', // Use root path for gateway compatibility
   allowRequest: (req, callback) => {
     // Allow requests from gateway (with XTransformPort query)
     callback(null, true);
@@ -261,16 +262,43 @@ function sendNotification(userId: string, notification: NotificationData): void 
 
 // ============================================
 // HTTP Endpoints for Event Bridge
+// Only handle specific paths, let socket.io handle the rest
 // ============================================
 
 httpServer.on('request', async (req, res) => {
-  if (req.method === 'POST' && req.url?.startsWith('/emit/')) {
+  const url = req.url || '';
+
+  // Check if headers already sent by socket.io
+  if (res.headersSent) return;
+
+  // Only handle specific paths
+  if (req.method === 'GET' && (url === '/health' || url.split('?')[0] === '/health')) {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      status: 'ok',
+      connectedUsers: connectedUsers.size,
+      uptime: process.uptime(),
+    }));
+    return;
+  }
+
+  if (req.method === 'GET' && url === '/online') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      count: userSockets.size,
+      users: Array.from(userSockets.keys()),
+    }));
+    return;
+  }
+
+  if (req.method === 'POST' && url.startsWith('/emit/')) {
     let body = '';
     req.on('data', chunk => { body += chunk; });
     req.on('end', () => {
+      if (res.headersSent) return;
       try {
         const data = JSON.parse(body);
-        const urlParts = req.url.split('/');
+        const urlParts = url.split('/');
         const targetType = urlParts[2];
         const targetId = urlParts[3];
         const event = urlParts[4];
@@ -306,28 +334,6 @@ httpServer.on('request', async (req, res) => {
     });
     return;
   }
-
-  if (req.method === 'GET' && req.url === '/health') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      status: 'ok',
-      connectedUsers: connectedUsers.size,
-      uptime: process.uptime(),
-    }));
-    return;
-  }
-
-  if (req.method === 'GET' && req.url === '/online') {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({
-      count: userSockets.size,
-      users: Array.from(userSockets.keys()),
-    }));
-    return;
-  }
-
-  res.writeHead(404);
-  res.end('Not Found');
 });
 
 // ============================================

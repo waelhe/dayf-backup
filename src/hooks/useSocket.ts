@@ -68,16 +68,21 @@ function getSocketInstance(): Socket | null {
  * Get socket connection configuration
  * يعيد إعدادات الاتصال المناسبة للبيئة
  * 
- * الحل الجذري: WebSocket يعمل عبر Gateway مع headers صحيحة
+ * الحل: استخدام XTransformPort للـ Gateway
  */
 function getSocketConfig(userId?: string, role?: string): { url: string; options: Record<string, unknown> } {
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
 
-  // Always use WebSocket with polling fallback
-  // دائماً استخدم WebSocket مع polling كfallback
+  // Use XTransformPort query parameter for gateway routing
+  // استخدم XTransformPort للتوجيه عبر البوابة
   const options: Record<string, unknown> = {
     transports: ['websocket', 'polling'],
     auth: {
+      userId,
+      role,
+    },
+    query: {
+      XTransformPort: '3003', // Route to socket service via gateway
       userId,
       role,
     },
@@ -86,15 +91,7 @@ function getSocketConfig(userId?: string, role?: string): { url: string; options
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
     timeout: 20000,
-    path: '/socket.io/',
-    // Force WebSocket transport headers
-    transportOptions: {
-      websocket: {
-        extraHeaders: {
-          'X-Forwarded-Proto': typeof window !== 'undefined' ? window.location.protocol.replace(':', '') : 'https',
-        },
-      },
-    },
+    path: '/', // Use root path - gateway handles routing via XTransformPort
   };
 
   return { url: origin, options };
