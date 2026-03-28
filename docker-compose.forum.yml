@@ -1,0 +1,56 @@
+# ============================================
+# NodeBB Forum for Dayf Platform
+# منتدى NodeBB لمنصة ضيف
+# ============================================
+
+version: '3.8'
+
+services:
+  # NodeBB Forum
+  nodebb:
+    image: nodebb/docker:latest
+    container_name: dayf-forum
+    restart: unless-stopped
+    ports:
+      - "4567:4567"
+    environment:
+      - NODEBB_URL=http://localhost:4567
+      - NODEBB_DB=mongo
+      - NODEBB_MONGO_HOST=mongo
+      - NODEBB_MONGO_PORT=27017
+      - NODEBB_MONGO_USERNAME=nodebb
+      - NODEBB_MONGO_PASSWORD=nodebb123
+      - NODEBB_MONGO_DATABASE=nodebb
+      # تكامل مع Dayf
+      - DAYF_API_URL=http://host.docker.internal:3000
+      - DAYF_API_KEY=${DAYF_FORUM_API_KEY}
+    volumes:
+      - nodebb_data:/usr/src/app/public/uploads
+      - ./forum-config:/usr/src/app/config
+    depends_on:
+      - mongo
+      - redis
+
+  # MongoDB for NodeBB
+  mongo:
+    image: mongo:6
+    container_name: dayf-forum-mongo
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=nodebb
+      - MONGO_INITDB_ROOT_PASSWORD=nodebb123
+    volumes:
+      - mongo_data:/data/db
+
+  # Redis for NodeBB (Sessions + Cache)
+  redis:
+    image: redis:7-alpine
+    container_name: dayf-forum-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  nodebb_data:
+  mongo_data:
+  redis_data:
